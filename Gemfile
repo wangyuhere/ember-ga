@@ -17,6 +17,7 @@ group :development do
   gem 'quiet_assets'
 end
 group :development, :test do
+  gem 'dotenv-rails'
   gem 'factory_girl_rails'
   gem 'pry-rails'
   gem 'pry-rescue'
