@@ -10,6 +10,24 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require daterangepicker-bs3
  *= require_tree .
  *= require_self
  */
+@import 'bootstrap';
+
+.scrollable-list {
+  height: auto;
+  max-height: 500px;
+  overflow-x: auto;
+}
+
+.columns-list {
+  width: 95%;
+  left: auto;
+  top: auto;
+}
+
+.results {
+  display: none;
+}

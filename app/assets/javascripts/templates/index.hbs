@@ -1,0 +1,145 @@
+<h2>Google Analytics API Explorer</h2>
+
+<form role='form'>
+  <div class='row'>
+    <div class='col-md-4'>
+      <div class='form-group'>
+      <label for='account'>Account</label>
+      {{view Ember.Select
+             id = 'account'
+             content = accounts
+             optionValuePath = 'content.id'
+             optionLabelPath = 'content.name'
+             classNames = 'form-control'
+             selection = currentAccount }}
+      </div>
+    </div>
+
+    <div class='col-md-4'>
+      <div class='form-group'>
+        <label for='web-property'>Web Property</label>
+        {{view Ember.Select
+               id = 'web-property'
+               content = webProperties
+               optionValuePath = 'content.id'
+               optionLabelPath = 'content.name'
+               classNames = 'form-control'
+               selection = currentWebProperty }}
+      </div>
+    </div>
+
+    <div class='col-md-4'>
+      <div class='form-group'>
+        <label for='profile'>Profile</label>
+        {{view Ember.Select
+               id = 'profile'
+               content = profiles
+               optionValuePath = 'content.id'
+               optionLabelPath = 'content.name'
+               classNames = 'form-control'
+               selection = currentProfile }}
+      </div>
+    </div>
+  </div>
+
+  <div class='row'>
+    <div class='col-md-6'>
+      {{columns-filter name='Dimensions'
+                       columns=dimensions
+                       id='dimensions'
+                       classNames='form-group' }}
+    </div>
+    <div class='col-md-6'>
+      {{columns-filter name='Metrics'
+                       columns=metrics
+                       id='metrics'
+                       classNames='form-group' }}
+    </div>
+  </div>
+
+  <div class='row'>
+    <div class='col-md-6'>
+      <div class='form-group'>
+        <label for='filters'>Filters</label>
+        {{input id='filters' value=filters classNames='form-control' }}
+      </div>
+    </div>
+    <div class='col-md-6'>
+      <div class='form-group'>
+        <label for='segment'>Segment</label>
+        {{input id='segment' value=segment classNames='form-control' }}
+      </div>
+    </div>
+  </div>
+
+  <div class='row'>
+    <div class='col-md-6'>
+      {{date-range action='dateRangeChanged' classNames='form-group'}}
+    </div>
+    <div class='col-md-6'>
+      <div class='form-group'>
+        <label for='sort'>Sort</label>
+        {{input id='sort' value=sort classNames='form-control' }}
+      </div>
+    </div>
+  </div>
+
+  <div class='row'>
+    <div class='col-md-4'>
+      <div class='form-group'>
+        <label for='start-index'>Start Index</label>
+        {{input id='start-index' value=startIndex classNames='form-control' }}
+      </div>
+    </div>
+    <div class='col-md-4'>
+      <div class='form-group'>
+        <label for='max-results'>Max Results</label>
+        {{input id='max-results' value=maxResults classNames='form-control' }}
+      </div>
+    </div>
+    <div class='col-md-4'>
+      <div class='form-group'>
+        <label for='sampling-level'>Sampling Level</label>
+        {{view Ember.Select
+               id = 'sampling-level'
+               content = samplingLevels
+               classNames = 'form-control'
+               selection = samplingLevel }}
+      </div>
+    </div>
+  </div>
+
+  <div class='row'>
+    <div class='col-md-6'>
+      <div class='form-group'>
+        <a class='btn btn-primary' href='#' {{action 'fetchData'}}>Get Data</a>
+      </div>
+    </div>
+    <div class='col-md-6'>
+    </div>
+  </div>
+</form>
+
+{{view EmberGa.SpinView id='spin' isVisibleBinding='loading'}}
+
+<div class='panel panel-default results'>
+  <div class='panel-heading'>Results</div>
+  <table class='table table-condensed table-bordered'>
+    <thead>
+      <tr class='info'>
+        {{#each response.columnHeaders}}
+        <th>{{unbound name}}</th>
+        {{/each}}
+      </tr>
+    </thead>
+    <tbody>
+      {{#each row in response.rows}}
+      <tr>
+        {{#each data in row}}
+        <td>{{unbound data}}</td>
+        {{/each}}
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

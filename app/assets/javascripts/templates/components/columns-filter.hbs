@@ -1,0 +1,53 @@
+<label {{bind-attr for=view.columnsInput.elementId}}>{{name}}</label>
+{{input value=inputString class='form-control' viewName='columnsInput' }}
+<div class='row columns-list dropdown-menu'>
+  <div class='col-md-4'>
+    <div class='list-group scrollable-list'>
+      {{#each results}}
+        {{#view EmberGa.ColumnView column=this classNames='list-group-item'}}
+          {{id}}
+        {{/view}}
+      {{/each}}
+    </div>
+  </div>
+  <div class='col-md-8'>
+    {{#if curColumn}}
+    <div class='panel panel-info'>
+      <div class='panel-heading'>
+        {{curColumn.group}} - {{curColumn.uiName}}
+        {{#if curColumn.isDeprecated}}
+          <span class='text-danger'>deprecated</span>
+        {{/if}}
+      </div>
+      <div class='panel-body'>
+        <dl>
+          {{#if curColumn.replacedBy}}
+          <dt>Replaced by</dt>
+          <dd>{{curColumn.replacedBy}}</dd>
+          {{/if}}
+          <dt>Description</dt>
+          <dd>{{curColumn.description}}</dd>
+          <dt>Data type</dt>
+          <dd>{{curColumn.dataType}}</dd>
+          {{#if curColumn.calculation}}
+          <dt>Calculation</dt>
+          <dd>{{curColumn.calculation}}</dd>
+          {{/if}}
+          {{#if curColumn.minTemplateIndex}}
+          <dt>Min template index</dt>
+          <dd>{{curColumn.minTemplateIndex}}</dd>
+          {{/if}}
+          {{#if curColumn.maxTemplateIndex}}
+          <dt>Max template index</dt>
+          <dd>{{curColumn.maxTemplateIndex}}</dd>
+          {{/if}}
+          {{#if curColumn.allowedInSegments}}
+          <dt>Allowed in segments</dt>
+          <dd>{{curColumn.allowedInSegments}}</dd>
+          {{/if}}
+        </dl>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</div>

@@ -4,17 +4,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= content_for?(:title) ? yield(:title) : "Ember Ga" %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Ember Ga" %>">
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
   </head>
   <body>
-    <header>
-      <%= render 'layouts/navigation' %>
-    </header>
-    <main role="main">
-       <%= render 'layouts/messages' %>
-       <%= yield %>
-    </main>
+    <script type="text/javascript">
+      window.GaConfig = {
+        clientId: "<%= ENV['GA_CLIENT_ID'] %>",
+        apiKey: "<%= ENV['GA_API_KEY'] %>"
+      }
+    </script>
+    <%= javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js' %>
+    <%= javascript_include_tag 'application' %>
   </body>
 </html>
