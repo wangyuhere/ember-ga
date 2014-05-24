@@ -5,6 +5,11 @@ EmberGa.IndexController = Ember.Controller.extend
   profiles: []
   columns: []
   dateRange: null
+  dimensions: ''
+  metrics: ''
+  filters: ''
+  segment: ''
+  sort: ''
   startIndex: 1
   maxResults: 100
   samplingLevel: 'DEFAULT'
@@ -39,26 +44,43 @@ EmberGa.IndexController = Ember.Controller.extend
       c.type == 'DIMENSION'
   ).property 'query'
 
-  buildParam: (val) ->
+  buildGaParam: (val) ->
     val.split(',').filter((v) -> v.trim() != '').map((v) -> 'ga:' + v).join(',')
+
+  buildParams: ->
+    dates = @get('dateRange').split(' ~ ')
+    ids = 'ga:' + @get('currentProfile').id
+    params =
+      'ids': 'ga:' + @get('currentProfile').id
+      'start-date': dates[0]
+      'end-date': dates[1]
+      'metrics': @buildGaParam($('#metrics input').val())
+      'start-index': @get('startIndex')
+      'max-results': @get('maxResults')
+      'samplingLevel': @get('samplingLevel')
+
+    dimensions = @buildGaParam($('#dimensions input').val())
+    params['dimensions'] = dimensions if dimensions != ''
+
+    filters = @get('filters').trim()
+    params['filters'] = filters if filters != ''
+
+    segment = @get('segment').trim()
+    params['segment'] = segment if segment != ''
+
+    sort = @get('sort').trim()
+    params['sort'] = sort if sort != ''
+    params
 
   actions:
     dateRangeChanged: (dateRange) ->
       @set 'dateRange', dateRange
 
     fetchData: ->
-      dates = @get('dateRange').split(' ~ ')
-      promise = EmberGa.GA.fetch
-        'ids': 'ga:' + @get('currentProfile').id
-        'start-date': dates[0]
-        'end-date': dates[1]
-        'dimensions': @buildParam($('#dimensions input').val())
-        'metrics': @buildParam($('#metrics input').val())
-        'start-index': @get('startIndex')
-        'max-results': @get('maxResults')
-        'samplingLevel': @get('samplingLevel')
       @set 'loading', true
-      promise.then (response) =>
+      promise = EmberGa.GA.fetch(
+        @buildParams()
+      ).then (response) =>
         @set 'response', response
         @set 'loading', false
         $('.results').show()
