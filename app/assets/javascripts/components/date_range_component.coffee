@@ -1,6 +1,6 @@
 EmberGa.DateRangeComponent = Ember.Component.extend
   inputId: 'date-range'
-  startDate: moment().subtract("day", 29)
+  startDate: moment().subtract('day', 29)
   endDate: moment()
   format: 'YYYY-MM-DD'
   separator: ' ~ '
@@ -9,10 +9,6 @@ EmberGa.DateRangeComponent = Ember.Component.extend
     format = @get 'format'
     @get('startDate').format(format) + @get('separator') + @get('endDate').format(format)
   ).property 'startDate', 'endDate'
-
-  setDateRange: (->
-    @sendAction 'action', @get('dateRange')
-  ).observes('dateRange')
 
   setup: (->
     @.$('input.form-control').daterangepicker({
@@ -24,6 +20,6 @@ EmberGa.DateRangeComponent = Ember.Component.extend
     (start, end) =>
       @set 'startDate', start
       @set 'endDate', end
+      @sendAction 'action', @get('startDate'), @get('endDate')
     )
-    @sendAction 'action', @get('dateRange')
   ).on 'willInsertElement'

@@ -4026,7 +4026,7 @@ EmberGa.GAColumns = {
 EmberGa.Columns = []
 for item in EmberGa.GAColumns.items
   attrs = {}
-  attrs['id'] = item.id.substring 3
+  attrs['id'] = item.id
   for k, v of item.attributes
     attrs[k] = v
   EmberGa.Columns.push EmberGa.Column.create(attrs)

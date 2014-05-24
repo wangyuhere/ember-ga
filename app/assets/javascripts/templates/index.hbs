@@ -45,13 +45,13 @@
   <div class='row'>
     <div class='col-md-6'>
       {{columns-filter name='Dimensions'
-                       columns=dimensions
+                       columns=allDimensions
                        id='dimensions'
                        classNames='form-group' }}
     </div>
     <div class='col-md-6'>
       {{columns-filter name='Metrics'
-                       columns=metrics
+                       columns=allMetrics
                        id='metrics'
                        classNames='form-group' }}
     </div>
@@ -74,7 +74,11 @@
 
   <div class='row'>
     <div class='col-md-6'>
-      {{date-range action='dateRangeChanged' classNames='form-group'}}
+      {{date-range startDate=startDateObj
+                   endDate=endDateObj
+                   format=format
+                   action='dateRangeChanged'
+                   classNames='form-group'}}
     </div>
     <div class='col-md-6'>
       <div class='form-group'>

@@ -1,10 +1,26 @@
 EmberGa.IndexController = Ember.Controller.extend
+  queryParams: [
+    'startDate'
+    'endDate'
+    'filters'
+    'segment'
+    'sort'
+    'samplingLevel'
+    'startIndex'
+    'maxResults'
+  ]
+
   loading: false
+  format: 'YYYY-MM-DD'
+
   accounts: []
   webProperties: []
   profiles: []
-  columns: []
-  dateRange: null
+  allColumns: []
+
+  ids: ''
+  startDate: ''
+  endDate: ''
   dimensions: ''
   metrics: ''
   filters: ''
@@ -19,6 +35,22 @@ EmberGa.IndexController = Ember.Controller.extend
   currentWebProperty: null
   currentProfile: null
 
+  startDateObj: (->
+    startDate = @get 'startDate'
+    if startDate
+      moment startDate, @get('format')
+    else
+      moment().subtract('day', 29)
+  ).property 'startDate'
+
+  endDateObj: (->
+    endDate = @get 'endDate'
+    if endDate
+      moment endDate, @get('format')
+    else
+      moment()
+  ).property 'endDate'
+
   accountChanged: (->
     EmberGa.GA.listWebProperties(@get('currentAccount').id).then (webProperties) =>
       @set('webProperties', webProperties)
@@ -32,28 +64,27 @@ EmberGa.IndexController = Ember.Controller.extend
   ).observes('currentWebProperty')
 
   profileChanged: (->
+    @set 'ids', 'ga:' + @get('currentProfile').id
   ).observes('currentProfile')
 
-  metrics: (->
-    @get('columns').filter (c) ->
+  allMetrics: (->
+    @get('allColumns').filter (c) ->
       c.type == 'METRIC'
   ).property 'query'
 
-  dimensions: (->
-    @get('columns').filter (c) ->
+  allDimensions: (->
+    @get('allColumns').filter (c) ->
       c.type == 'DIMENSION'
   ).property 'query'
 
   buildGaParam: (val) ->
-    val.split(',').filter((v) -> v.trim() != '').map((v) -> 'ga:' + v).join(',')
+    val.split(',').filter((v) -> v.trim() != '').join(',')
 
   buildParams: ->
-    dates = @get('dateRange').split(' ~ ')
-    ids = 'ga:' + @get('currentProfile').id
     params =
-      'ids': 'ga:' + @get('currentProfile').id
-      'start-date': dates[0]
-      'end-date': dates[1]
+      'ids': @get('ids')
+      'start-date': @get('startDate')
+      'end-date': @get('endDate')
       'metrics': @buildGaParam($('#metrics input').val())
       'start-index': @get('startIndex')
       'max-results': @get('maxResults')
@@ -73,8 +104,10 @@ EmberGa.IndexController = Ember.Controller.extend
     params
 
   actions:
-    dateRangeChanged: (dateRange) ->
-      @set 'dateRange', dateRange
+    dateRangeChanged: (start, end) ->
+      format = @get 'format'
+      @set 'startDate', start.format(format)
+      @set 'endDate', end.format(format)
 
     fetchData: ->
       @set 'loading', true
