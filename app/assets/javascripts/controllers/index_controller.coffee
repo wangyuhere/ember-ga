@@ -110,10 +110,9 @@ EmberGa.IndexController = Ember.Controller.extend
       @set 'endDate', end.format(format)
 
     fetchData: ->
+      params = @buildParams()
       @set 'loading', true
-      promise = EmberGa.GA.fetch(
-        @buildParams()
-      ).then (response) =>
+      EmberGa.GA.fetch(params).then (response) =>
         @set 'response', response
         @set 'loading', false
         $('.results').show()
