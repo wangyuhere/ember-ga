@@ -128,22 +128,30 @@
 
 <div class='panel panel-default results'>
   <div class='panel-heading'>Results</div>
-  <table class='table table-condensed table-bordered'>
-    <thead>
-      <tr class='info'>
-        {{#each response.columnHeaders}}
-        <th>{{unbound name}}</th>
-        {{/each}}
-      </tr>
-    </thead>
-    <tbody>
-      {{#each row in response.rows}}
-      <tr>
-        {{#each data in row}}
-        <td>{{unbound data}}</td>
-        {{/each}}
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
+  <div class='panel-body'>
+    {{#if response.error}}
+      <div class='alert alert-danger'>
+        {{response.message}}
+      </div>
+    {{else}}
+      <table class='table table-condensed table-bordered'>
+        <thead>
+          <tr class='info'>
+            {{#each response.columnHeaders}}
+            <th>{{unbound name}}</th>
+            {{/each}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each row in response.rows}}
+          <tr>
+            {{#each data in row}}
+            <td>{{unbound data}}</td>
+            {{/each}}
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{/if}}
+  </div>
 </div>
