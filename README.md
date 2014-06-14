@@ -3,6 +3,8 @@ Ember Ga
 
 Google Analytics API Explorer using Ember.js
 
+[Demo](http://ember-ga.herokuapp.com/)
+
 Contributing
 --
 
